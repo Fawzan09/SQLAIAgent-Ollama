@@ -1,0 +1,6 @@
+phidata
+python-dotenv
+chainlit
+PyMySQL
+cryptography
+sqlalchemy
