@@ -42,11 +42,9 @@ async def on_message(message : cl.Message):
          await cl.Message(content=f"Error: Missing key in session: {e}").send()
     
     except AttributeError as e:
-        # Handle AttributeError (e.g., issues with 'agent.run')
         await cl.Message(content=f"Error: Invalid operation: {e}").send()
     
     except Exception as e:
-        # Handle all other exceptions
         await cl.Message(content=f"An unexpected error occurred: {e}").send()
 
 
