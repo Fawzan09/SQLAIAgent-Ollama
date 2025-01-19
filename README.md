@@ -1,6 +1,7 @@
 # SQL AI Agent
 
 A powerful SQL AI agent built with Phi Data that helps you interact with your databases through natural language conversations. This project leverages a **local LLM (Ollama)** for secure and efficient database interactions.
+
 ---
 ## ✨ Features
 
