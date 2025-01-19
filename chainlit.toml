@@ -1,0 +1,4 @@
+[project]
+name = "SQL Generator"
+description = "A Chainlit app for generating and executing SQL queries."
+port = 8000

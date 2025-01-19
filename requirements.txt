@@ -4,3 +4,4 @@ chainlit
 PyMySQL
 cryptography
 sqlalchemy
+ollama
