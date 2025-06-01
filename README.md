@@ -124,17 +124,21 @@ OPENAI_API_KEY=your_openai_api_key_here
 ### Model Options
 
 #### Ollama Models (Local)
-- `llama3.1` - Latest Llama model
-- `llama3.2` - Newer Llama variant
-- `codellama` - Code-specialized model
-- `mistral` - Mistral model
+- `llama3.2` - **Recommended** - Better for structured tasks than 3.1
+- `llama3.1` - Good but may need `prevent_hallucinations=True`
+- `codellama` - **Best for SQL** - Specialized for code and database queries
+- `mistral` - Good alternative with consistent performance
 - And other models available in Ollama
 
+> **💡 Tip**: For Ollama models, consider setting `prevent_hallucinations=True` in `app.py` for better SQL task performance.
+
 #### OpenAI Models (API)
-- `gpt-4o-mini` - Cost-effective GPT-4 variant
-- `gpt-4o` - Latest GPT-4 model
-- `gpt-3.5-turbo` - Fast and efficient
-- `gpt-4-turbo` - High-performance model
+- `gpt-4o-mini` - **Recommended** - Cost-effective with excellent SQL performance
+- `gpt-4o` - Best quality but more expensive
+- `gpt-3.5-turbo` - Fast and efficient for simple queries
+- `gpt-4-turbo` - High-performance for complex analysis
+
+> **💡 Tip**: OpenAI models generally work well with the default `prevent_hallucinations=False` setting.
 
 ### Database Connection URLs
 
@@ -294,4 +298,146 @@ If you encounter any issues or have questions:
 - Review the example configurations
 
 **Happy querying! 🚀**
+## ⚙️ Advanced Configuration & Optimization
+
+### 🎛️ Fine-tuning Agent Behavior
+
+The agent behavior can be customized by modifying parameters in `app.py`. Here are key settings that affect performance:
+
+#### `prevent_hallucinations` Parameter
+
+```python
+prevent_hallucinations=False  # Current default setting
+```
+
+**When to use `prevent_hallucinations=True`:**
+- ✅ **Ollama models** (llama3.1, llama3.2, codellama) - Often provide better, more focused responses
+- ✅ **Production environments** - Ensures more predictable behavior
+- ✅ **When accuracy is critical** - Reduces creative but potentially incorrect responses
+- ✅ **Smaller or less capable models** - Helps maintain focus on database tasks
+
+**When to use `prevent_hallucinations=False`:**
+- ✅ **OpenAI models** (gpt-4o-mini, gpt-4o) - Generally perform well with more flexibility
+- ✅ **Development/testing** - Allows more creative problem-solving approaches
+- ✅ **Complex queries** - May help with nuanced database analysis
+- ✅ **When you want more conversational responses**
+
+### 🔧 Model-Specific Recommendations
+
+#### For Ollama Models:
+```python
+# In create_agent() function, consider using:
+prevent_hallucinations=True,  # More focused responses
+temperature=0.1,              # Lower temperature for consistency
+```
+
+#### For OpenAI Models:
+```python
+# Current settings work well:
+prevent_hallucinations=False, # Allows flexibility
+temperature=0.1,              # Good balance
+```
+
+### 🎯 Troubleshooting Poor Responses
+
+If you're experiencing poor quality responses:
+
+1. **Try different models:**
+   ```bash
+   # For Ollama - try these models:
+   ollama pull llama3.2        # Often better than 3.1 for structured tasks
+   ollama pull codellama       # Specialized for code/SQL
+   ollama pull mistral         # Good alternative
+   ```
+
+2. **Adjust `prevent_hallucinations`:**
+   ```python
+   # Edit app.py, line ~75:
+   prevent_hallucinations=True  # Try this for Ollama models
+   ```
+
+3. **Modify temperature settings:**
+   ```python
+   # For more consistent responses:
+   temperature=0.05  # Very focused
+   
+   # For more creative responses:
+   temperature=0.3   # More flexible
+   ```
+
+4. **Switch to OpenAI temporarily:**
+   ```env
+   MODEL_PROVIDER=openai
+   MODEL_NAME=gpt-4o-mini
+   ```
+
+### 📊 Model Performance Comparison
+
+Based on testing with SQL tasks:
+
+| Model | Best Settings | Performance | Notes |
+|-------|---------------|-------------|-------|
+| **gpt-4o-mini** | `prevent_hallucinations=False`, `temp=0.1` | ⭐⭐⭐⭐⭐ | Excellent for SQL tasks |
+| **gpt-4o** | `prevent_hallucinations=False`, `temp=0.1` | ⭐⭐⭐⭐⭐ | Best overall, but expensive |
+| **llama3.2** | `prevent_hallucinations=True`, `temp=0.1` | ⭐⭐⭐⭐ | Good with proper settings |
+| **llama3.1** | `prevent_hallucinations=True`, `temp=0.05` | ⭐⭐⭐ | Can be inconsistent |
+| **codellama** | `prevent_hallucinations=True`, `temp=0.1` | ⭐⭐⭐⭐ | Great for SQL structure queries |
+
+### 🛠️ Custom Configuration Example
+
+Create a custom configuration for your specific use case:
+
+```python
+def create_agent():
+    model = create_model()
+    
+    # Custom settings based on your model choice
+    if model_provider == 'ollama':
+        hallucination_prevention = True
+        temp_setting = 0.05
+    else:  # OpenAI
+        hallucination_prevention = False
+        temp_setting = 0.1
+    
+    sql_agent = Agent(
+        tools=[SQLTools(db_url=db_url)],
+        model=model,
+        add_history_to_messages=True,
+        num_history_responses=10,
+        prevent_hallucinations=hallucination_prevention,  # Dynamic setting
+        # ... rest of configuration
+    )
+```
+
+### 💡 Pro Tips
+
+1. **Test with your specific database:** Different models may perform better with different database structures
+2. **Monitor response quality:** Keep track of which settings work best for your use case
+3. **Consider hybrid approach:** Use OpenAI for complex analysis, Ollama for simple queries
+4. **Adjust based on hardware:** More powerful hardware may handle higher temperatures better
+
+### 🚨 Known Issues & Solutions
+
+**Issue: Ollama models giving poor responses**
+```bash
+# Solution: Try these steps in order:
+1. Set prevent_hallucinations=True in app.py
+2. Lower temperature to 0.05
+3. Try llama3.2 instead of llama3.1
+4. Switch to codellama for SQL-heavy tasks
+```
+
+**Issue: Responses too verbose or unfocused**
+```python
+# Solution: Increase constraints
+prevent_hallucinations=True
+temperature=0.05
+max_tokens=500  # Limit response length
+```
+
+**Issue: Responses too rigid or unhelpful**
+```python
+# Solution: Increase flexibility
+prevent_hallucinations=False
+temperature=0.2
 ```
