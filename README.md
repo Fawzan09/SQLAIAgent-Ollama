@@ -1,25 +1,33 @@
 # SQL AI Agent
 
-A powerful SQL AI agent built with Phi Data that helps you interact with your databases through natural language conversations. This project leverages a **local LLM (Ollama)** for secure and efficient database interactions.
+A powerful SQL AI agent built with Phi Data that helps you interact with your databases through natural language conversations. This project supports both **local LLM (Ollama)** and **OpenAI API** models for flexible deployment options.
+
+**🚀 Latest Update**: Enhanced AI agent with improved system prompts for better responsiveness and proactive query execution!
 
 ---
 ## ✨ Features
 
-- Natural language to SQL query conversion
-- Interactive chat interface using **Chainlit**
-- Secure database connection handling
-- Context-aware conversation with history retention
-- Customizable agent behavior with prompts
-- Support for multiple SQL databases (**MySQL, PostgreSQL, SQLite, etc.**)
-- Easy database configuration via connection URLs
-- Local LLM model support (**Ollama**)
+- **🤖 Enhanced AI Agent**: Advanced system prompts for proactive SQL query execution
+- **🔄 Dual Model Support**: Switch between local Ollama models and OpenAI API models
+- **⚡ Intelligent Query Execution**: Agent automatically executes SQL queries without asking permission
+- **🎯 Improved Responsiveness**: No more "I don't know" responses - agent actively investigates database
+- **💬 Natural Language Interface**: Ask questions in plain English, get SQL results
+- **🖥️ Interactive Chat Interface**: Clean web interface using **Chainlit**
+- **🔒 Secure Database Handling**: Safe database connection management
+- **📝 Context-Aware Conversations**: Remembers conversation history
+- **🛢️ Multi-Database Support**: Works with **MySQL, PostgreSQL, SQLite, and more**
+- **⚙️ Easy Configuration**: Simple environment variable setup
 
 ![img.png](img.png)
+
 ---
 ## 🛠️ Technology Stack
 
 - **Phi Data**: Core AI agent functionality and tools
-- **Ollama**: Local LLM integration with **llama3.1**
+- **Enhanced Prompting System**: Custom system prompts for optimal performance
+- **Model Options**:
+  - **Ollama**: Local LLM integration (llama3.1, llama3.2, codellama, etc.)
+  - **OpenAI API**: Cloud-based models (gpt-4o-mini, gpt-4o, gpt-3.5-turbo, etc.)
 - **Chainlit**: Web-based chat interface
 - **SQLAlchemy**: SQL toolkit and ORM
 - **Database Connectors**:
@@ -27,6 +35,23 @@ A powerful SQL AI agent built with Phi Data that helps you interact with your da
   - **psycopg2** for PostgreSQL
   - Other SQLAlchemy-supported databases
 - **Python-dotenv**: Environment variable management
+
+---
+## 🆕 What's New in This Version
+
+### 🎯 Dramatically Improved AI Agent Performance
+- **🧠 Advanced System Prompts**: Completely redesigned agent behavior with sophisticated system prompts
+- **⚡ Proactive Query Execution**: Agent now automatically executes SQL queries instead of asking permission
+- **🚫 Eliminated "I Don't Know" Responses**: Agent actively investigates database to find answers
+- **📊 Smarter Database Interaction**: Immediately responds with relevant SQL queries and results
+- **🔄 Better Context Understanding**: Enhanced comprehension of user intent and database structure
+
+### 🔧 Technical Improvements
+- **Optimized temperature settings** for more consistent responses
+- **Enhanced error handling** with detailed feedback
+- **Improved session management** for better stability
+- **Streamlined model switching** between Ollama and OpenAI
+
 ---
 ## 🚀 Getting Started
 
@@ -34,8 +59,8 @@ A powerful SQL AI agent built with Phi Data that helps you interact with your da
 
 - Python 3.10+ 
 - A SQL database (**MySQL, PostgreSQL, SQLite, etc.**)
-- **Ollama** installed and running on your system (follow [Ollama's documentation](https://www.ollama.com/docs/installation) to install and run it)
-- Llama3.1 model preloaded in Ollama
+- **For Ollama**: Ollama installed and running locally
+- **For OpenAI**: Valid OpenAI API key
 
 ### Installation
 
@@ -50,15 +75,66 @@ cd SQLAIAgent-Ollama
 pip install -r requirements.txt
 ```
 
-3. Install and serve the llama3.1 model locally with Ollama:
+3. **For Ollama usage** - Install and serve your preferred model:
 ```bash
 ollama pull llama3.1
+# or
+ollama pull llama3.2
+# or
+ollama pull codellama
 ```
 
-4. Create a `.env` file in the root directory with your credentials:
+4. **Configure environment variables**:
+
+   **Copy the example configuration file:**
+   ```bash
+   cp .env.example .env
+   ```
+
+   **Edit the `.env` file with your settings:**
+   ```bash
+   # On Linux/Mac
+   nano .env
+   
+   # On Windows
+   notepad .env
+   ```
+
+   **Update the following variables with your actual values:**
+   - Replace `sk-your-openai-api-key-here` with your actual OpenAI API key (if using OpenAI)
+   - Adjust `MODEL_PROVIDER` and `MODEL_NAME` according to your preference
+
+### Configuration Options
+
+#### Option 1: Using Ollama (Local)
 ```env
 DB_URL=your_database_url
+MODEL_PROVIDER=ollama
+MODEL_NAME=llama3.1
 ```
+
+#### Option 2: Using OpenAI API
+```env
+DB_URL=your_database_url
+MODEL_PROVIDER=openai
+MODEL_NAME=gpt-4o-mini
+OPENAI_API_KEY=your_openai_api_key_here
+```
+
+### Model Options
+
+#### Ollama Models (Local)
+- `llama3.1` - Latest Llama model
+- `llama3.2` - Newer Llama variant
+- `codellama` - Code-specialized model
+- `mistral` - Mistral model
+- And other models available in Ollama
+
+#### OpenAI Models (API)
+- `gpt-4o-mini` - Cost-effective GPT-4 variant
+- `gpt-4o` - Latest GPT-4 model
+- `gpt-3.5-turbo` - Fast and efficient
+- `gpt-4-turbo` - High-performance model
 
 ### Database Connection URLs
 
@@ -87,161 +163,135 @@ Start the application using Chainlit:
 ```bash
 chainlit run app.py
 ```
+
+The application will automatically detect your configured model provider and initialize accordingly.
+
 ---
 
 ## 💡 Usage
 
 Once the application is running:
 1. Open the provided Chainlit link in your browser.
-2. Start chatting with the AI agent using natural language queries.
-3. Ask questions about your database and get detailed responses.
-4. View the SQL queries used in the responses.
+2. The welcome message will show which model and database type are being used.
+3. Start chatting with the AI agent using natural language queries.
+4. **The agent will automatically execute SQL queries and show results!**
+5. View both the SQL queries used and their formatted results.
 
-Example queries:
-- "List the first 2 records from the table 'users'"
-- "Show me all records from 'users' table"
+### ✨ Example Interactions
+
+**Before (Old Version):**
+```
+User: "What's the database name?"
+Agent: "I don't know. You can run SELECT current_database();"
+```
+
+**After (New Version):**
+```
+User: "What's the database name?"
+Agent: "The database name is 'my_database'.
+
+SQL Query Used:
+SELECT current_database();
+
+Result: my_database"
+```
+
+### 🎯 Example Queries
+- **"What's the database name?"** - Instantly shows database name
+- **"What tables exist?"** - Lists all tables immediately  
+- **"Show me the users table structure"** - Displays table schema
+- **"List the first 5 records from orders"** - Shows sample data
+- **"How many records are in the products table?"** - Gives count
+- **"What columns does the customers table have?"** - Shows column info
+
+## 🔄 Switching Between Models
+
+To switch between Ollama and OpenAI:
+
+1. **Update your `.env` file**:
+   ```env
+   # For Ollama
+   MODEL_PROVIDER=ollama
+   MODEL_NAME=llama3.1
+   
+   # For OpenAI
+   MODEL_PROVIDER=openai
+   MODEL_NAME=gpt-4o-mini
+   OPENAI_API_KEY=your_api_key
+   ```
+
+2. **Restart the application**:
+   ```bash
+   chainlit run app.py
+   ```
 
 ## ⚠️ Error Handling
 
 The application includes robust error handling for:
 - Database connection issues
+- Model initialization errors
 - Invalid queries
 - Session management errors
+- API key validation (for OpenAI)
+- SQL execution errors with helpful suggestions
 
 ---
+
+## 🔒 Privacy & Security
+
+- **Ollama**: Completely local processing, no data sent to external services
+- **OpenAI**: Data is sent to OpenAI's servers, ensure compliance with your privacy requirements
+- **Database**: Always stays local, never sent to external model providers beyond query context
+
+---
+
+## 🎯 Performance Improvements
+
+| Aspect | Before | After |
+|--------|--------|-------|
+| **Response Time** | Asks permission first | Immediate execution |
+| **User Experience** | Manual query requests | Automatic investigation |
+| **Error Handling** | Generic "I don't know" | Specific helpful guidance |
+| **Proactivity** | Reactive only | Proactive query execution |
+| **Intelligence** | Basic responses | Context-aware decisions |
+
+---
+
+## 🆚 Model Comparison
+
+| Feature | Ollama (Local) | OpenAI API |
+|---------|----------------|------------|
+| **Privacy** | ✅ Complete | ⚠️ Data sent to OpenAI |
+| **Cost** | ✅ Free | 💰 Pay per usage |
+| **Speed** | ⚡ Hardware dependent | ⚡ Generally fast |
+| **Setup** | 🔧 Requires local installation | 🔑 Just need API key |
+| **Offline** | ✅ Works offline | ❌ Requires internet |
+| **Models** | 🎯 Open source models | 🚀 Latest GPT models |
+
+Choose the option that best fits your privacy, cost, and performance requirements!
+
+---
+
 ## 📝 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ---
 
-# Key Differences Between the Original and Forked Versions:
+## 🤝 Contributing
 
----
+We welcome contributions! Feel free to:
+- Report bugs
+- Suggest new features  
+- Submit pull requests
+- Improve documentation
 
-#### 1. **Model**:
-   - **Original**: Uses the `Groq` model with `llama-3.3-70b-versatile` via an API key.
-     ```python
-     model=Groq(id="llama-3.3-70b-versatile", api_key=api_key)
-     ```
-   - **Forked**: Uses the locally deployed `Ollama` model with ID `llama3.1`.
-     ```python
-     ollama_model = Ollama(
-         id="llama3.1",
-         host="http://localhost:11434",
-         options={...}
-     )
-     ```
+## 📞 Support
 
-   **Difference**: The forked version replaces the external model with a locally deployed one, removing the dependency on an external API and adding parameters for fine-tuning the model (e.g., `temperature`, `top_p`).
+If you encounter any issues or have questions:
+- Open an issue on GitHub
+- Check the documentation
+- Review the example configurations
 
----
-
-#### 2. **Database Handling**:
-   - **Original**: Assumes the database is MySQL.
-     ```python
-     instructions=[
-         "Answer the questions related to the MySQL database in detail."
-     ]
-     ```
-   - **Forked**: Automatically detects the database type using SQLAlchemy.
-     ```python
-     engine = create_engine(db_url)
-     db_type = engine.dialect.name  # sqlite, postgresql, etc
-     ```
-     Instructions and descriptions dynamically adapt to the detected database type:
-     ```python
-     description=f"You are a helpful AI agent that answers questions for a {db_type} database."
-     instructions=[f"Answer the questions related to the {db_type} SQL database in detail."]
-     ```
-
-   **Difference**: The forked version is versatile and supports multiple database types instead of being limited to MySQL.
-
----
-
-#### 3. **Message History**:
-   - **Original**: Keeps only 3 previous responses.
-     ```python
-     num_history_responses=3
-     ```
-   - **Forked**: Extends the history to 10 previous responses for better context.
-     ```python
-     num_history_responses=10
-     ```
-
-   **Difference**: The forked version supports longer conversational context for handling more complex queries.
-
----
-
-#### 4. **Hallucination Prevention**:
-   - **Original**: Does not include measures to prevent "hallucinated" responses.
-   - **Forked**: Adds a `prevent_hallucinations` parameter to minimise incorrect responses:
-     ```python
-     prevent_hallucinations=True
-     ```
-
-   **Difference**: The forked version explicitly instructs the model to avoid making up answers and respond appropriately when data is unavailable.
-
----
-
-#### 5. **Telemetry**:
-   - **Original**: Does not disable telemetry.
-   - **Forked**: Explicitly disables telemetry for privacy:
-     ```python
-     os.environ["PHI_TELEMETRY"] = "false"
-     ```
-
-   **Difference**: The forked version ensures the system operates in a private environment.
-
----
-
-#### 6. **Model Configuration**:
-   - **Original**: No configuration for parameters like `temperature` or `max_tokens`.
-   - **Forked**: Includes additional model configuration options for better output control:
-     ```python
-     options={
-         "temperature": 0.1,
-         "top_p": 1.0,
-         "presence_penalty": 0.0,
-         "frequency_penalty": 0.0
-     }
-     ```
-
-   **Difference**: The forked version allows precise control over the model's behaviour and responses.
-
----
-
-#### 7. **Message Processing**:
-   - **Original**: Adds chat context to OpenAI explicitly:
-     ```python
-     cl.chat_context.to_openai()
-     ```
-   - **Forked**: Removes the `cl.chat_context.to_openai()` call as it is unnecessary for a locally running model.
-
-   **Difference**: The forked version simplifies message processing for the local setup.
-
----
-
-#### 8. **Code Formatting and Documentation**:
-   - **Original**: Minimal comments, specific to MySQL.
-   - **Forked**: Includes detailed comments for universal usage:
-     ```python
-     # Detecting the database's type
-     engine = create_engine(db_url)
-     db_type = engine.dialect.name  # sqlite, postgresql, etc
-     ```
-
-   **Difference**: The forked version has more structured and readable code with better documentation.
-
----
-
-### Conclusion:
-
-The forked version:
-- Supports multiple database types instead of being limited to MySQL.
-- Utilises a locally deployed model (Ollama) rather than an external API.
-- Enhances response accuracy by adding hallucination prevention and better control over model behaviour.
-- Extends conversational history for improved context in complex interactions.
-- Disables telemetry for privacy and has more detailed documentation.
-
-If flexibility and local operation are your priorities, the forked version is the better choice. The original version works well if you only need MySQL and external API integration.
+**Happy querying! 🚀**
+```
