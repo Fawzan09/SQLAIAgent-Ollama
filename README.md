@@ -3,11 +3,22 @@
 A powerful SQL AI agent built with Phi Data that helps you interact with your databases through natural language conversations. This project supports both **local LLM (Ollama)** and **OpenAI API** models for flexible deployment options.
 
 **🚀 Latest Update**: Enhanced AI agent with improved system prompts for better responsiveness and proactive query execution!
+---
+## 🆕 What's New in This Version
+ ### 🎯 Dramatically Improved AI Agent Performance
+ - **🧠 Advanced System Prompts**: Completely redesigned agent behavior with sophisticated system prompts
++- **🧾 Structured Output Protocol**: Agent now responds in strict JSON format (`query` + `response`)
++- **📤 Plain Queries**: SQL statements are returned as plain strings, no escaping or unicode
+ - **⚡ Proactive Query Execution**: Agent now automatically executes SQL queries instead of asking permission
+ - **🚫 Eliminated "I Don't Know" Responses**: Agent actively investigates database to find answers
+ - **📊 Smarter Database Interaction**: Immediately responds with relevant SQL queries and results
 
 ---
 ## ✨ Features
 
-- **🤖 Enhanced AI Agent**: Advanced system prompts for proactive SQL query execution
+- **🧠 Smarter AI Agent**: Enforces strict JSON protocol for consistent, structured output  
+- **🧾 Plain SQL Output**: Queries returned as plain text – no escaped quotes or Unicode  
+- **📦 JSON-Formatted Results**: Responses are valid JSON for seamless parsing and automation  
 - **🔄 Dual Model Support**: Switch between local Ollama models and OpenAI API models
 - **⚡ Intelligent Query Execution**: Agent automatically executes SQL queries without asking permission
 - **🎯 Improved Responsiveness**: No more "I don't know" responses - agent actively investigates database
