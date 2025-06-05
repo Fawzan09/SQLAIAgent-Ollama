@@ -2,7 +2,66 @@
 
 A powerful SQL AI agent built with Phi Data that helps you interact with your databases through natural language conversations. This project supports both **local LLM (Ollama)** and **OpenAI API** models for flexible deployment options.
 
-**🚀 Latest Update**: Enhanced AI agent with improved system prompts for better responsiveness and proactive query execution!
+---
+
+**🚀 Latest Update**:  
+- New commands: `/run`, `/raw`, and `/summary` for flexible SQL querying and output.
+- Integrated custom `FlexibleSQLTool` for readable tables and result summaries.
+- Improved system prompts for a more responsive and proactive AI agent!
+
+---
+## 🔍 Advanced SQL Commands & FlexibleSQLTool
+
+The application provides three special command prefixes for advanced SQL execution and custom output formatting:
+
+- **/run** — Executes the provided SQL query directly using the *RawSQLExecutor*. The output is returned as structured JSON, including the executed SQL, query result, and an explanation.  
+  *Intended for situations where you want the agent to process and explain the result in detail, suitable for automation and integration.*
+
+- **/raw** — Executes the provided SQL query using the *FlexibleSQLTool* and returns the result as a human-readable Markdown table, without extra commentary or AI-generated explanations.  
+  *Use this to quickly view any table or result in plain format, as you would in a database console.*
+
+- **/summary** — Executes the provided SQL query using the *FlexibleSQLTool* and returns a brief summary (such as row count and columns), not the full data.  
+  *This is useful for quickly inspecting the shape or structure of the result, especially for large datasets.*
+
+**Example usage:**
+/run SELECT * FROM products WHERE price > 100;
+/raw SELECT COUNT(*) AS total FROM users;
+/summary SELECT * FROM orders WHERE status='pending';
+
+### About FlexibleSQLTool
+
+By default, the agent framework (Phi) includes a standard SQL tool, but it had several limitations, including:
+
+- Limited formatting options: Could only output results as JSON, making it less readable in chat.
+- No quick tabular or summary output.
+- Difficult to customise result rendering, which is important for exploratory analysis and rapid review.
+
+To address these, the project introduces a custom class, **FlexibleSQLTool**, which allows:
+
+- Direct SQL execution with optional output format (table or summary).
+- Easy display of results as Markdown tables or summaries in the chat.
+- Improved error handling and more graceful output for large or empty result sets.
+- Consistent user experience across both `/raw` and `/summary` commands.
+
+**When to use FlexibleSQLTool?**
+- Use `/raw` and `/summary` to bypass the standard JSON protocol and see results as you would in a normal database client.
+- Use `/run` when you want fully structured output with explanation and potential automation.
+
+Summary Table:
+
+| Command    | Backend Tool         | Output Format                | Typical Use Case                                    |
+|------------|---------------------|------------------------------|-----------------------------------------------------|
+| /run       | RawSQLExecutor      | JSON (AI-formatted)          | Structured output for automation or analysis        |
+| /raw       | FlexibleSQLTool     | Markdown table               | Quick, human-friendly result view                   |
+| /summary   | FlexibleSQLTool     | Text summary                 | Fast overview of result set (rows, columns, etc.)   |
+
+---
+
+Note:  
+If you want to extend the functionality, simply add new output modes to FlexibleSQLTool, or create your own tool and register additional commands.
+---
+
+
 ---
 ## 🆕 What's New in This Version
  ### 🎯 Dramatically Improved AI Agent Performance
