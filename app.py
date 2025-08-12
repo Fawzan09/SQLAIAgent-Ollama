@@ -139,17 +139,52 @@ def render_response(data):
 @cl.on_chat_start
 async def on_chat_start():
     agent = create_agent()
-    flex_sql = FlexibleSQLTool(db_url=db_url) # 1
+    flex_sql = FlexibleSQLTool(db_url=db_url)
     cl.user_session.set("agent", agent)
     cl.user_session.set("raw_sql", RawSQLExecutor(db_url=db_url))
-    cl.user_session.set("flex_sql", flex_sql) # 1
+    cl.user_session.set("flex_sql", flex_sql)
 
-    msg = f"""🤖 **SQL AI Agent Ready!**
+    # Get database info for welcome message
+    try:
+        tables_query = "SELECT name FROM sqlite_master WHERE type='table';"
+        raw = RawSQLExecutor(db_url=db_url)
+        tables_result = raw.run_query(tables_query)
+        tables_list = [row['name'] for row in tables_result.get('result', [])]
+        tables_info = ", ".join(tables_list) if tables_list else "No tables found"
+    except:
+        tables_info = "Unable to fetch table information"
+
+    msg = f"""🏢 **WDP Office Data Analytics - SQL AI Agent Ready!**
 
 📊 **Database**: {db_type}  
 🧠 **Model**: {model_provider.upper()} – {model_name}  
+📋 **Available Tables**: {tables_info}
 
-You can ask questions in natural language or use `/run SELECT ...` for raw queries."""
+---
+
+### 🚀 **Quick Start Guide**
+
+**Natural Language Queries:**
+- "Show me all employees in the marketing department"
+- "What's the total revenue this quarter?"
+- "Find the top 5 customers by sales volume"
+
+**Commands:**
+- `/run SELECT * FROM employees LIMIT 5` - Execute raw SQL
+- `/raw [query]` - Get raw table output
+- `/summary [query]` - Get summarized results
+- `/help` - Show detailed help
+- `/schema` - Show database structure
+
+**Pro Tips:**
+- Ask about data relationships and insights
+- Request charts and analysis (coming soon)
+- Use natural language - the AI understands context!
+
+---
+
+**🎯 Ready to explore your WDP office data!** Ask me anything about your database."""
+
     await cl.Message(content=msg).send()
 
 
@@ -164,7 +199,71 @@ async def on_message(message: cl.Message):
 
     # Check for special commands
     lowered = content.lower()
-    if lowered.startswith("/run"):
+    
+    if lowered.startswith("/help") or lowered == "help":
+        help_msg = """## 📚 **WDP Office Data Analytics - Help Guide**
+
+### 🔍 **Natural Language Queries**
+You can ask questions in plain English:
+- "Show me all employees"
+- "What's the average salary by department?"
+- "Find customers from New York"
+- "Count how many orders were placed last month"
+
+### 💻 **Command Reference**
+- `/run [SQL]` - Execute raw SQL query
+- `/raw [query]` - Get raw table format output
+- `/summary [query]` - Get summarized analysis
+- `/schema` - Show complete database structure
+- `/tables` - List all available tables
+- `/help` - Show this help guide
+
+### 📊 **Sample Queries to Try**
+- "Describe the database structure"
+- "Show me sample data from each table"
+- "What are the column names and types?"
+- "Give me insights about the data relationships"
+
+### 🎯 **Pro Tips**
+- Be specific about what data you want
+- Ask for explanations if results are unclear
+- Use follow-up questions to dive deeper
+- The AI remembers your conversation context
+
+### 🚀 **Getting Started**
+1. Ask `/schema` to see your database structure
+2. Try a simple query like "show me sample data"
+3. Ask specific business questions about your data
+
+**Need specific help?** Just ask! I'm here to help you analyze your WDP office data efficiently."""
+        
+        await cl.Message(content=help_msg).send()
+        return
+    
+    elif lowered.startswith("/schema"):
+        schema_query = "SELECT sql FROM sqlite_master WHERE type='table';"
+        result = raw.run_query(schema_query)
+        if result.get('result'):
+            schema_info = "## 🗂️ **Database Schema**\n\n"
+            for row in result['result']:
+                schema_info += f"```sql\n{row['sql']}\n```\n\n"
+        else:
+            schema_info = "❌ Could not retrieve schema information."
+        await cl.Message(content=schema_info).send()
+        return
+    
+    elif lowered.startswith("/tables"):
+        tables_query = "SELECT name FROM sqlite_master WHERE type='table';"
+        result = raw.run_query(tables_query)
+        if result.get('result'):
+            tables_list = [row['name'] for row in result['result']]
+            tables_info = f"## 📋 **Available Tables**\n\n" + "\n".join([f"- **{table}**" for table in tables_list])
+        else:
+            tables_info = "❌ No tables found."
+        await cl.Message(content=tables_info).send()
+        return
+
+    elif lowered.startswith("/run"):
         query = content[4:].strip()
         result = raw.run_query(query)
         response_md = render_response(result)

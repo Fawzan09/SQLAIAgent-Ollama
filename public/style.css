@@ -1,0 +1,171 @@
+/* WDP Office Data Analytics - Custom Styling */
+:root {
+  --primary-color: #2E86AB;
+  --secondary-color: #A23B72;
+  --accent-color: #F18F01;
+  --background-color: #F8F9FA;
+  --text-color: #2C3E50;
+  --success-color: #27AE60;
+  --error-color: #E74C3C;
+  --warning-color: #F39C12;
+}
+
+/* Main container styling */
+.chainlit-app {
+  background: linear-gradient(135deg, #F8F9FA 0%, #E8F4F8 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header customization */
+.chainlit-header {
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Message bubbles */
+.message-container {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 8px 0;
+}
+
+.user-message {
+  background: linear-gradient(135deg, var(--primary-color), #4A90A4);
+  color: white;
+}
+
+.assistant-message {
+  background: white;
+  border: 2px solid #E3F2FD;
+  color: var(--text-color);
+}
+
+/* SQL code blocks styling */
+.code-block {
+  background: #1E1E1E;
+  border-radius: 8px;
+  border-left: 4px solid var(--accent-color);
+}
+
+/* Table styling for results */
+.result-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 10px 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.result-table th {
+  background: var(--primary-color);
+  color: white;
+  padding: 12px;
+  font-weight: 600;
+}
+
+.result-table td {
+  padding: 10px;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.result-table tr:nth-child(even) {
+  background: #F8F9FA;
+}
+
+.result-table tr:hover {
+  background: #E3F2FD;
+}
+
+/* Input field styling */
+.chat-input {
+  border: 2px solid var(--primary-color);
+  border-radius: 20px;
+  padding: 12px 20px;
+  font-size: 16px;
+}
+
+.chat-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(46, 134, 171, 0.3);
+}
+
+/* Button styling */
+.custom-button {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.custom-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(46, 134, 171, 0.4);
+}
+
+/* Status indicators */
+.status-success {
+  color: var(--success-color);
+  font-weight: 600;
+}
+
+.status-error {
+  color: var(--error-color);
+  font-weight: 600;
+}
+
+.status-warning {
+  color: var(--warning-color);
+  font-weight: 600;
+}
+
+/* Help section styling */
+.help-section {
+  background: linear-gradient(135deg, #E3F2FD, #F3E5F5);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 10px 0;
+  border-left: 5px solid var(--accent-color);
+}
+
+.help-title {
+  color: var(--primary-color);
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.help-content {
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+/* Animation for loading states */
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+.loading {
+  animation: pulse 1.5s infinite;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .chainlit-app {
+    padding: 10px;
+  }
+  
+  .result-table {
+    font-size: 14px;
+  }
+  
+  .help-section {
+    padding: 15px;
+  }
+}

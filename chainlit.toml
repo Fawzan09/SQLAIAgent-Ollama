@@ -1,4 +1,21 @@
 [project]
-name = "SQL Generator"
-description = "A Chainlit app for generating and executing SQL queries."
+name = "WDP Office Data Analytics"
+description = "AI-powered SQL interface for WDP Office data analysis and reporting."
 port = 8000
+
+[UI]
+# Custom theme colors
+default_collapse_content = true
+default_expand_messages = false
+github = "https://github.com/Fawzan09/WDP"
+
+[theme]
+primary_color = "#2E86AB"
+background_color = "#F8F9FA"
+text_color = "#2C3E50"
+
+[features]
+# Enable file upload for database import
+upload_button = true
+# Enable chat profile for different analysis modes
+chat_profile = true
